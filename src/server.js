@@ -14,9 +14,11 @@ const startServer = async () => {
         await sequelize.sync({ alter:true })
         console.log("Modelos sincronizados")
 
-        app.listen(PORT, () => {
-            console.log(`Servido corriendo en http://localhost:${PORT}`);
-        })
+        if (process.env.NODE_ENV !== 'production') {
+            app.listen(PORT, () => {
+                console.log(`Servido corriendo en http://localhost:${PORT}`);
+            })
+        }
     } catch(error) {
         console.error("Error al iniciar el servidor: ", error)
         process.exit(1)
@@ -24,3 +26,5 @@ const startServer = async () => {
 };
 
 startServer()
+
+module.exports = app;
