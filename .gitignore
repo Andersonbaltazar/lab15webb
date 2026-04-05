@@ -13,3 +13,7 @@ build/
 .idea/
 .vscode/
 *.log
+
+# Maven build artifacts
+bus-api/target/
+bus-api/.mvn/wrapper/maven-wrapper.jar
