@@ -30,6 +30,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            // CSRF is disabled intentionally: this is a stateless REST API secured
+            // with an API Key header. No browser session or cookie-based authentication
+            // is used, so CSRF attacks are not applicable.
             .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -43,8 +46,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(allowedOrigins.split(",")));
         config.setAllowedMethods(List.of("GET", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(false);
+        config.setAllowedHeaders(List.of("X-API-KEY", "Content-Type"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
